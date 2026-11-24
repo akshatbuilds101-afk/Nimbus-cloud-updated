@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>/* Set saved theme before first paint to prevent gradient flashes. */
+(function(){try{var t=localStorage.getItem('nv-theme')||'default';if(t!=='default'&&['obsidian','forest','rose','amber','arctic','neon','light'].includes(t)){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NimbusVault — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="nimbus-gradient.css">
+<link rel="stylesheet" href="liquid-glass.css">
+<link rel="stylesheet" href="theme-shell.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-left">
+  <div class="brand">
+    <div class="brand-icon">☁</div>
+    <div class="brand-name">Nimbus<span>Vault</span></div>
+  </div>
+  <div class="auth-left-content">
+    <h1 class="auth-headline">Your files,<br><em>always there.</em></h1>
+    <p class="auth-tagline">A private cloud vault for files, images, notes & videos. 8 GB free. Beautifully organized.</p>
+    <div class="feat-list">
+      <div class="feat-item"><span class="feat-icon">☁</span><div><div class="feat-label">8 GB Free Cloud Storage</div><div class="feat-sub">Powered by Supabase Storage</div></div></div>
+      <div class="feat-item"><span class="feat-icon">🔐</span><div><div class="feat-label">Encrypted & Private</div><div class="feat-sub">Row-level security on all data</div></div></div>
+      <div class="feat-item"><span class="feat-icon">🔗</span><div><div class="feat-label">Instant Sharing Links</div><div class="feat-sub">One-click shareable URLs</div></div></div>
+    </div>
+  </div>
+  <div class="auth-footer">NimbusVault v3.0 · Supabase · Cloudinary</div>
+</div>
+
+<div class="auth-right">
+  <div class="auth-box">
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-sub-title">Sign in to your NimbusVault account</p>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</div>
+      <div class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Create Account</div>
+    </div>
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') handleAuth()">
+    </div>
+    <button class="btn-main" id="authBtn" onclick="handleAuth()"><span id="authBtnText">Sign In →</span></button>
+    <div class="auth-hint" id="authHint">Don't have an account? <a onclick="switchTab('signup')">Create one free</a></div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+<script>
+let currentTab = 'login';
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  document.getElementById('authBtnText').textContent = tab === 'login' ? 'Sign In →' : 'Create Account →';
+  document.getElementById('authHint').innerHTML = tab === 'login'
+    ? `Don't have an account? <a onclick="switchTab('signup')">Create one free</a>`
+    : `Already have an account? <a onclick="switchTab('login')">Sign in</a>`;
+}
+async function handleAuth() {
+  if (currentTab === 'login') await login();
+  else await signUp();
+}
+window.onload = async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (user) window.location.href = 'dashboard.html';
+};
+</script>
+<script src="ui-motion.js"></script>
+</body>
+</html>

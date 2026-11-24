@@ -1,0 +1,49 @@
+/* Persistent theme canvas: prevent the original gradient bleeding through during
+   page changes, animations, scroll and translucent panel rendering. */
+html[data-theme="obsidian"] { --nv-canvas:#0d0d0f; }
+html[data-theme="forest"]   { --nv-canvas:#0b1d15; }
+html[data-theme="rose"]     { --nv-canvas:#23101d; }
+html[data-theme="amber"]    { --nv-canvas:#251707; }
+html[data-theme="arctic"]   { --nv-canvas:#0c1c30; }
+html[data-theme="neon"]     { --nv-canvas:#080a0b; }
+html[data-theme="light"]    { --nv-canvas:#eef3fc; }
+html[data-theme] {
+  background:var(--nv-canvas)!important;
+  background-image:none!important;
+  min-height:100%;
+  color-scheme:dark;
+}
+html[data-theme="light"] { color-scheme:light; }
+html[data-theme] body:not(.auth-body) {
+  background:var(--nv-canvas)!important;
+  background-image:none!important;
+  background-color:var(--nv-canvas)!important;
+  background-attachment:scroll!important;
+  min-height:100vh;
+}
+/* The application canvas is opaque, but glass cards and panels remain translucent. */
+html[data-theme] body:not(.auth-body) .app-layout,
+html[data-theme] body:not(.auth-body) .nv-shell {
+  background-color:var(--nv-canvas)!important;
+  background-image:none!important;
+  min-height:100vh;
+}
+html[data-theme] body:not(.auth-body) .main-content,
+html[data-theme] body:not(.auth-body) .nv-main,
+html[data-theme] body:not(.auth-body) .nv-content {
+  background-color:var(--nv-canvas)!important;
+  background-image:none!important;
+}
+/* Avoid an old bright background being revealed by fade/slide animations. */
+html[data-theme] body.nv-ready:not(.auth-body),
+html[data-theme] body.nv-leaving:not(.auth-body) {
+  background-color:var(--nv-canvas)!important;
+}
+/* Smooth, restrained interaction animations without animating the page canvas. */
+html[data-theme] body:not(.auth-body) :is(.nav-item,.nv-cat,.nv-utility,.btn-primary,.btn-ghost) {
+  transition:color .2s ease, background-color .2s ease, border-color .2s ease,
+    transform .22s ease, box-shadow .22s ease!important;
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] body:not(.auth-body) :is(.nav-item,.nv-cat,.nv-utility){transition:none!important}
+}
